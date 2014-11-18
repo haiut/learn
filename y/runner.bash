@@ -3,8 +3,9 @@
 export BZA=http://qa.a.blazemeter.com/api/latest
 export BZA_API_KEY=0b203f0b4cf4ee6abf99
 export CURL_ARGS='--insecure -H "Content-Type: application/json" -H "x-api-key: 0b203f0b4cf4ee6abf99" '
+export FILE=@${WORKSPACE}/y/test1.json
 
-TEST_ID=$(curl -X POST -d @test1.json -s -k -H "Content-Type: application/json" -H "x-api-key: ${BZA_API_KEY}"  ${BZA}/tests/custom?custom_test_type=yahoo | jq '.result.id' )
+TEST_ID=$(curl -X POST -d $FILE -s -k -H "Content-Type: application/json" -H "x-api-key: ${BZA_API_KEY}"  ${BZA}/tests/custom?custom_test_type=yahoo | jq '.result.id' )
 
 #TEST_ID=$(curl -X POST -d @test1.json $CURL_ARGS ${BZA}/tests/custom?custom_test_type=yahoo | jq '.result.id' )
 if [ "$TEST_ID" = "null" ] ; then
