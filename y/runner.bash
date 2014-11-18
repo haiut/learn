@@ -1,21 +1,27 @@
 #!/bin/bash
 
-#env
-#
 export BZA=http://qa.a.blazemeter.com/api/latest
-export BZA_API_KEY="api_key=0b203f0b4cf4ee6abf99"
+export BZA_API_KEY=0b203f0b4cf4ee6abf99
+export CURL_ARGS='--insecure -H "Content-Type: application/json" -H "x-api-key: 0b203f0b4cf4ee6abf99" '
 
-#curl --silent --insecure ${BZA}/tests/5002315?${BZA_API_KEY}
-#curl --silent --insecure ${BZA}/tests/5002315/sessions?${BZA_API_KEY}
+TEST_ID=$(curl -X POST -d @test1.json -s -k -H "Content-Type: application/json" -H "x-api-key: ${BZA_API_KEY}"  ${BZA}/tests/custom?custom_test_type=yahoo | jq '.result.id' )
 
-SESSION_ID=$(curl --silent --insecure ${BZA}/tests/5002315/start?${BZA_API_KEY} | jq '.result.sessionsId[]' | tr -d \")
+#TEST_ID=$(curl -X POST -d @test1.json $CURL_ARGS ${BZA}/tests/custom?custom_test_type=yahoo | jq '.result.id' )
+if [ "$TEST_ID" = "null" ] ; then
+	echo "Failed to create test"
+	exit 1
+fi
+
+echo "Test created .. ID = " $TEST_ID
+
+SESSION_ID=$(curl --silent --insecure ${BZA}/tests/${TEST_ID}/start?api_key=${BZA_API_KEY} | jq '.result.sessionsId[]' | tr -d \")
 echo "Test started .."
 
-TEST_RUN_STATUS=$(curl --silent --insecure ${BZA}/sessions/${SESSION_ID}?${BZA_API_KEY} | jq '.result.status' | tr -d \" )
+TEST_RUN_STATUS=$(curl --silent --insecure ${BZA}/sessions/${SESSION_ID}?api_key=${BZA_API_KEY} | jq '.result.status' | tr -d \" )
 while [ "$TEST_RUN_STATUS" != "ENDED" ]; do
         echo "Test status = " $TEST_RUN_STATUS
         sleep 60
         echo "Trying again .."
-	TEST_RUN_STATUS=$(curl --silent --insecure ${BZA}/sessions/${SESSION_ID}?${BZA_API_KEY} | jq '.result.status' | tr -d \" )
+	TEST_RUN_STATUS=$(curl --silent --insecure ${BZA}/sessions/${SESSION_ID}?api_key=${BZA_API_KEY} | jq '.result.status' | tr -d \" )
 done
 echo "Test status = " $TEST_RUN_STATUS

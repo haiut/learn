@@ -1,0 +1,32 @@
+{ "test": 
+	{ 
+	"name": "test via script 01",
+	"location": "us-central1-a",
+	"duration": 15, 
+	"rps": 50, 
+	"rps_step_up": { "start_rps": 5, "end_rps": 50, "step_increment": 10, "step_duration": 1 }, 
+	"thresholds": { "avg_resp_time": 1000 }, 
+	"user-logins": [ 
+		{ "id": 1, "username": "user_1", "password": "p2" }, 
+		{ "id": 2, "username": "user_2", "password": "p2" } 
+	], 
+	"common-headers": { "X-Custom-Header": "blazemeter header value" }, 
+	"common-login-id": 1, 
+	"urls": [ 
+		{ 
+			"url": "http://vitali.a.blazemeter.com/echo.php?url=1", 
+			"headers": { "Host": "vitali.a.blazemeter.com", "User-Agent": "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36" }, 
+			"thresholds": { "max_resp_time": 10000 }, 
+			"login_id": 2 
+		}, 
+		{ 
+			"url": "http://vitali.a.blazemeter.com/echo.php?url=local/", 
+			"headers": { "Accept-Charset": "ISO-8859-1" } 
+		}, 
+		{ 
+			"url": "http://vitali.a.blazemeter.com/echo.php?name=filename", 
+			"login_id": 2 
+		} 
+		] 
+	} 
+}
