@@ -1,6 +1,6 @@
 { "test": 
 	{ 
-	"name": "test via script 01",
+	"name": "test via script 02",
 	"location": "us-central1-a",
 	"duration": 15, 
 	"rps": 50, 
